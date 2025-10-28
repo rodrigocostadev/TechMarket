@@ -1,2 +1,16 @@
 
-<h1>Extrato</h1>
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <h1 class="mt-5">Extrato</h1>
+
+{% endblock %}
+

@@ -1,2 +1,17 @@
 
-<h1>Perfil</h1>
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <h1 class="mt-5">Perfil</h1>
+
+{% endblock %}
+

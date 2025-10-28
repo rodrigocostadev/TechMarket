@@ -4,12 +4,13 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.conf.urls import include
+from app_techmarket.views.LoginView import login_user
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("techmarket/", include('app_techmarket.urls.UrlsApp')),
-    # path("", login_user, name='login'),
+    path("techmarket/", include('app_techmarket.urls.urlsApp')),
+    path("", login_user, name='login'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

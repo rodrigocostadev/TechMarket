@@ -1,2 +1,15 @@
+{% extends 'base.html' %}
 
-<h1>Minhas Compras</h1>
+{% load static %}
+
+{% block css %} 
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+    <h1 class="mt-5">Minhas Compras</h1>
+
+{% endblock %}
+
