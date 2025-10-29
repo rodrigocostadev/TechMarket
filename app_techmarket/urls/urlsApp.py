@@ -22,5 +22,5 @@ urlpatterns = [
     path('extrato/', extrato_view, name="extrato_view"),
     path('minhas_compras/', minhas_compras_view, name="minhas_compras_view"),
     path('perfil/', perfil_view, name="perfil_view"),
-    path('produto_selecionado/', prod_selecionado_view, name="prod_selecionado_view"),
+    path('produto_selecionado/<int:pk>/', prod_selecionado_view, name="prod_selecionado_view"),
 ]

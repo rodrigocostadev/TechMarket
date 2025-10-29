@@ -32,7 +32,7 @@
 
                     {% comment %} <a class="navbar-brand" href="{% url 'home_view' %}" >Techmarket</a> {% endcomment %}
                     <a class="navbar-brand" href="{% url 'atualizar_saldo_view' %}" >Att Saldo</a>
-                    <a class="navbar-brand" href="{% url 'cadastro_view' %}" >Cadastro</a>
+                    {% comment %} <a class="navbar-brand" href="{% url 'cadastro_view' %}" >Cadastro</a> {% endcomment %}
                     <a class="navbar-brand" href="{% url 'extrato_view' %}" >Extrato</a>
                     <a class="navbar-brand" href="{% url 'minhas_compras_view' %}" >Minhas Compras</a>
                     <a class="navbar-brand" href="{% url 'perfil_view' %}" >Perfil</a>
@@ -46,7 +46,14 @@
                 {% comment %} {% if user.is_authenticated and user.is_staff  %} {% endcomment %}
                     {% comment %} <a class="navbar-brand" href="{% url 'teste' %}" >Solicitação de NF</a> {% endcomment %}
                 {% comment %} {% endif %}  {% endcomment %}
-                <a class="navbar-brand" href="{% url 'logout' %}" >Sair</a>
+                <div class="d-flex align-items-center gap-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-white">
+                            💰 Saldo: <strong>R$ {{ user.perfilusuario.saldo }}</strong>
+                        </span>
+                        <a class="navbar-brand" href="{% url 'logout' %}">Sair</a>
+                    {% endif %}
+                </div>
             </div>
 
         </nav>  
