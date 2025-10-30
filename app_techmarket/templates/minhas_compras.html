@@ -9,7 +9,50 @@
 
 {% block content %}
 
-    <h1 class="mt-5">Minhas Compras</h1>
+    <div class="container mt-5">
+
+        <h1 class="text-center mb-4 pt-3">Minhas Compras</h1>
+
+        {% if compras %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover shadow-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Data</th>
+                            <th>Produto / Descrição</th>
+                            <th>Valor (R$)</th>
+                            <th>Forma de Pagamento</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compra in compras %}
+                            <tr>
+                                <td>{{ compra.data|date:"d/m/Y H:i" }}</td>
+                                <td>{{ compra.descricao }}</td>
+                                <td>{{ compra.valor|floatformat:2 }}</td>
+                                <td>{{ compra.forma_pagamento }}</td>
+                                <td>
+                                    {% if compra.status == 'pago' %}
+                                        <span class="badge bg-success">Pago</span>
+                                    {% elif compra.status == 'pendente' %}
+                                        <span class="badge bg-warning text-dark">Pendente</span>
+                                    {% elif compra.status == 'cancelado' %}
+                                        <span class="badge bg-danger">Cancelado</span>
+                                    {% else %}
+                                        {{ compra.status }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-muted mt-5">Você ainda não realizou nenhuma compra.</p>
+        {% endif %}
+
+    </div>
 
 {% endblock %}
 

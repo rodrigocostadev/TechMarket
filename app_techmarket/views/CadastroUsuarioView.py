@@ -15,6 +15,7 @@ def cadastro_view(request):
         senha1 = request.POST.get("senha1")
         senha2 = request.POST.get("senha2")
         saldo = request.POST.get("saldo")
+        imagem = request.FILES.get("imagem")
 
         if senha1 != senha2:
             messages.error(request, "As senhas não coincidem.")
@@ -25,7 +26,7 @@ def cadastro_view(request):
             return redirect('cadastro_view')
 
         novo_usuario = User.objects.create_user(username=usuario, email=email, password=senha1)
-        PerfilUsuario.objects.create(usuario=novo_usuario, saldo=saldo)
+        PerfilUsuario.objects.create(usuario=novo_usuario, saldo=saldo, imagem=imagem)
 
         messages.success(request, "Cadastro realizado com sucesso! Faça login para continuar.")
         return redirect('login')

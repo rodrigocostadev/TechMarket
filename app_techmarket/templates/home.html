@@ -118,9 +118,9 @@
         <button type="submit">Buscar</button>
     </form> {% endcomment %}
 
-    <h1 class="mt-5">Home</h1>
+    {% comment %} <h1 class="mt-5">Home</h1> {% endcomment %}
 
-    <div class="car-grid">
+    <div class="car-grid pt-5 mt-5">
         {% if lista_produtos %}
             {% for produto in lista_produtos %}
                 {% comment %} <a href="{% url 'car_detail' car.pk %}"> {% endcomment %}

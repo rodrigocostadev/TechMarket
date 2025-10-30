@@ -10,7 +10,52 @@
 
 {% block content %}
 
-    <h1 class="mt-5">Atualizar Saldo</h1>
+    {% comment %} <h1 class="mt-5">Atualizar Saldo</h1> {% endcomment %}
+
+    <div class="container pt-3 mt-5">
+
+    <h1 class="mb-4 mt-5 text-center" >Atualizar Saldo</h1>
+
+
+    <div class="card p-4 shadow-sm mb-4">
+        <h3>Saldo atual: 
+            <span class="text-success">
+                R$ {{ usuario.saldo|floatformat:2 }}
+            </span>
+        </h3>
+    </div>
+
+    <div class="row">
+        <!-- Formulário de Depósito -->
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">Depositar</h4>
+                <form method="post" action="{% url 'atualizar_saldo_view' %}">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="valor_deposito">Valor:</label>
+                        <input type="number" name="depositar" step="0.01" min="0.01" class="form-control" id="valor_deposito" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Depositar</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Formulário de Saque -->
+        <div class="col-md-6">
+            <div class="card p-4 shadow-sm">
+                <h4 class="mb-3">Sacar</h4>
+                <form method="post" action="{% url 'atualizar_saldo_view' %}">
+                    {% csrf_token %}
+                    <div class="form-group mb-3">
+                        <label for="valor_saque">Valor:</label>
+                        <input type="number" name="sacar" step="0.01" min="0.01" class="form-control" id="valor_saque" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100">Sacar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 

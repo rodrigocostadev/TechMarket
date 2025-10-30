@@ -92,7 +92,7 @@
         }
     </style>
 
-    <div class="mt-5" style="margin-top 100px;">
+    <div class="mt-5 pt-4" >
 
         <div class="car-card mt-5">
             {% comment %} <img src="{{ object.photo.url }}" alt="{{ object.model }} - {{ object.brand }}"> {% endcomment %}
@@ -116,9 +116,10 @@
 
     {% if user.is_authenticated %}
         <div class="buttons-container">    
-            {% comment %} <a href="{% url 'car_update' pk=object.pk %}" class="btn btn-primary">Editar</a>
-            <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar</a> {% endcomment %}
-            <a href="#" class="btn btn-success">Comprar</a>
+            <form action="{% url 'prod_selecionado_view' produto.pk %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" name="compra_realizada" class="btn btn-success">Comprar</button>
+            </form>
         </div>
     {% endif %}
 

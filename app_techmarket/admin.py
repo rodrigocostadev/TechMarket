@@ -4,6 +4,7 @@ from .models.Produto import Produto
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import PerfilUsuario
+from .models import Movimentacao
 
 class PerfilUsuarioInline(admin.StackedInline):
     model = PerfilUsuario
@@ -21,3 +22,4 @@ admin.site.register(User, UserAdmin)
 
 admin.site.register(Compra)
 admin.site.register(Produto)
+admin.site.register(Movimentacao)

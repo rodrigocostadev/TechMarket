@@ -1,3 +1,4 @@
 from .Compra import *
 from .Produto import *
-from .PerfilUsuario import PerfilUsuario
+from .PerfilUsuario import *
+from .Movimentacao import *

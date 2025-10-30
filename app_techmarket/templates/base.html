@@ -35,7 +35,7 @@
                     {% comment %} <a class="navbar-brand" href="{% url 'cadastro_view' %}" >Cadastro</a> {% endcomment %}
                     <a class="navbar-brand" href="{% url 'extrato_view' %}" >Extrato</a>
                     <a class="navbar-brand" href="{% url 'minhas_compras_view' %}" >Minhas Compras</a>
-                    <a class="navbar-brand" href="{% url 'perfil_view' %}" >Perfil</a>
+                    
 
                     {% comment %} {% if user.is_staff or usuario_nome_completo == "Gerente Teste" or usuario_nome_completo == "Raphael Grego Fagundes" %}
                         <a class="navbar-brand" href="{% url 'editar_supervisores' %}" >Supervisores</a>
@@ -51,6 +51,7 @@
                         <span class="text-white">
                             💰 Saldo: <strong>R$ {{ user.perfilusuario.saldo }}</strong>
                         </span>
+                        <a class="navbar-brand" href="{% url 'perfil_view' %}" >{{ request.user }}</a>
                         <a class="navbar-brand" href="{% url 'logout' %}">Sair</a>
                     {% endif %}
                 </div>
