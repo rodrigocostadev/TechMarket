@@ -12,49 +12,40 @@
 
     <div class="container mt-5 pt-3">
 
-        <h1 class="text-center mb-4">Extrato de Compras</h1>
+        <h1 class="text-center mb-4">Extrato de Conta</h1>
 
         <!-- Saldo atual -->
-        <div class="alert alert-info text-center mb-4">
+        {% comment %} <div class="alert alert-info text-center mb-4">
             <strong>Saldo atual:</strong> R$ {{ saldo|floatformat:2 }}
-        </div>
+        </div> {% endcomment %}
 
-        <!-- Tabela de compras -->
-        {% if compras %}
-            <div class="table-responsive">
-                <table class="table table-striped table-hover shadow-sm">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Data</th>
-                            <th>Descrição</th>
-                            <th>Valor (R$)</th>
-                            <th>Forma de Pagamento</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for compra in compras %}
-                            <tr>
-                                <td>{{ compra.data|date:"d/m/Y H:i" }}</td>
-                                <td>{{ compra.descricao }}</td>
-                                <td>-{{ compra.valor|floatformat:2 }}</td>
-                                <td>{{ compra.forma_pagamento }}</td>
-                                <td>
-                                    {% if compra.status == 'pago' %}
-                                        <span class="badge bg-success">Pago</span>
-                                    {% elif compra.status == 'pendente' %}
-                                        <span class="badge bg-warning text-dark">Pendente</span>
-                                    {% elif compra.status == 'cancelado' %}
-                                        <span class="badge bg-danger">Cancelado</span>
-                                    {% else %}
-                                        {{ compra.status }}
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        {% if movimentacoes_usuario %}
+            {% for compra in movimentacoes_usuario %}
+                <div class="alert alert-info text-center mb-4 w-50 mx-auto">
+                    <div class="d-flex justify-content-around" >
+                        <div class="" >
+                            <strong>Data:</strong> {{ compra.data_hora|date:"d/m/Y H:i" }}
+                        </div>
+                        {% if compra.produto %}
+                            <div class="" >
+                                <strong>Produto:</strong> {{ compra.produto.titulo|default_if_none:"" }}
+                            </div>
+                        {% endif %}  
+                    </div>
+                    <div class="d-flex justify-content-around mt-4">
+                        <div class="" >
+                            <strong>Descrição:</strong> {{ compra.tipo_movimentacao }}
+                        </div>
+                        <div class="" >
+                            {% if compra.tipo_movimentacao == "Deposito" %}
+                                <strong>Valor:</strong> + R$ {{ compra.valor|floatformat:2 }}
+                            {% else %}
+                                <strong>Valor:</strong> - R$ {{ compra.valor|floatformat:2 }}
+                            {% endif %}                            
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         {% else %}
             <p class="text-center text-muted">Nenhuma compra registrada.</p>
         {% endif %}
@@ -63,3 +54,39 @@
 
 {% endblock %}
 
+
+
+
+
+
+
+{% comment %} {% if movimentacoes_usuario %}
+            <div class="table-responsive">
+                <table class="table table-striped table-hover shadow-sm">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Produto</th>
+                            <th>Valor (R$)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for compra in movimentacoes_usuario %}
+                            <tr>
+                                <td>{{ compra.data_hora|date:"d/m/Y H:i" }}</td>
+                                <td>{{ compra.tipo_movimentacao }}</td>
+                                <td>{{ compra.produto.titulo|default_if_none:"" }}</td>
+                                {% if compra.tipo_movimentacao == "Deposito" %}
+                                    <td>+ R${{ compra.valor|floatformat:2 }}</td>
+                                {% else %}
+                                    <td>- R${{ compra.valor|floatformat:2 }}</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-center text-muted">Nenhuma compra registrada.</p>
+        {% endif %} {% endcomment %}

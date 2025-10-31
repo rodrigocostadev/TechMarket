@@ -108,7 +108,7 @@
         }
 
         a:hover{
-        color: #0096c7;
+        color: black;
         }
     </style>
 
@@ -131,7 +131,8 @@
                 {% else %}
                     <p style="height:65%; display:flex; align-items:center; justify-content:center; font-family: sans-serif;">Sem foto disponível</p>
                 {% endif %}
-                    <h2 style="font-family: sans-serif;">{{ produto.titulo }}</h2>
+                    {% comment %} <h2 style="font-family: sans-serif;">{{ produto.titulo }}</h2> {% endcomment %}
+                    <h2 class="fs-3">{{ produto.titulo }}</h2>
                     <p style="font-family: sans-serif;" >R$ {{ produto.preco }}</p>
                 </div>
                 </a>

@@ -3,7 +3,64 @@
 {% load static %}
 
 {% block css %} 
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'css/home.css' %}"> {% endcomment %}
+    <style>
+        .compra-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .compra-card:hover {
+            background-color: #e9ecef;
+            transform: scale(1.01);
+        }
+
+        .compra-info {
+            flex: 1;
+        }
+
+        .compra-info h5 {
+            font-weight: bold;
+            color: #212529;
+            margin-bottom: 10px;
+        }
+
+        .compra-info p {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #198754;
+        }
+
+        .compra-imagem {
+            width: 250px;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+            margin-left: 20px;
+            border: 1px solid #ccc;
+        }
+
+        @media (max-width: 768px) {
+            .compra-card {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+
+            .compra-imagem {
+                margin: 10px 0 0 0;
+                width: 100%;
+                max-width: 250px;
+                height: auto;
+            }
+        }
+    </style>
 {% endblock %}
 
 
@@ -13,43 +70,30 @@
 
         <h1 class="text-center mb-4 pt-3">Minhas Compras</h1>
 
-        {% if compras %}
-            <div class="table-responsive">
-                <table class="table table-striped table-hover shadow-sm">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Data</th>
-                            <th>Produto / Descrição</th>
-                            <th>Valor (R$)</th>
-                            <th>Forma de Pagamento</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for compra in compras %}
-                            <tr>
-                                <td>{{ compra.data|date:"d/m/Y H:i" }}</td>
-                                <td>{{ compra.descricao }}</td>
-                                <td>{{ compra.valor|floatformat:2 }}</td>
-                                <td>{{ compra.forma_pagamento }}</td>
-                                <td>
-                                    {% if compra.status == 'pago' %}
-                                        <span class="badge bg-success">Pago</span>
-                                    {% elif compra.status == 'pendente' %}
-                                        <span class="badge bg-warning text-dark">Pendente</span>
-                                    {% elif compra.status == 'cancelado' %}
-                                        <span class="badge bg-danger">Cancelado</span>
-                                    {% else %}
-                                        {{ compra.status }}
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+        {% if compras_usuario %}
+            {% for compra in compras_usuario %}
+                <div class="compra-card w-50 mx-auto">
+                    <div class="compra-info d-flex flex-column gap-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <strong class="fs-5" >Produto:</strong>{{ compra.produto.titulo }}
+                        </div>
+                        <div class="d-flex gap-3">
+                            <strong>Descrição:</strong>{{ compra.produto.descricao }}
+                        </div>
+                        <div class="d-flex gap-3">
+                            <strong>Valor:</strong>R$ {{ compra.produto.preco|floatformat:2 }}
+                        </div>
+                    </div>
+
+                    {% if compra.produto.imagem %}
+                        <img src="{{ compra.produto.imagem.url }}" alt="{{ compra.produto.titulo }}" class="compra-imagem">
+                    {% else %}
+                        <img src="{% static 'img/sem-imagem.png' %}" alt="Sem imagem" class="compra-imagem">
+                    {% endif %}
+                </div>
+            {% endfor %}
         {% else %}
-            <p class="text-center text-muted mt-5">Você ainda não realizou nenhuma compra.</p>
+            <p class="text-center text-muted">Você ainda não realizou nenhuma compra.</p>
         {% endif %}
 
     </div>
