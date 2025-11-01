@@ -34,16 +34,22 @@ def atualizar_saldo_view(request):
 
             saque = Decimal(request.POST.get('sacar'))
             usuario.saldo -= saque
-            usuario.save()
 
-            Movimentacao.objects.create(
-                usuario=request.user,
-                valor=saque,
-                tipo_movimentacao="Saque"
-            )
+            if usuario.saldo > 0:
+                usuario.save()
 
-            messages.success(request, f"Saque de R$ {saque} realizado com sucesso!")
-            return redirect ('atualizar_saldo_view')
+                Movimentacao.objects.create(
+                    usuario=request.user,
+                    valor=saque,
+                    tipo_movimentacao="Saque"
+                )
+
+                messages.success(request, f"Saque de R$ {saque} realizado com sucesso!")
+                return redirect ('atualizar_saldo_view')
+            
+            else:
+                messages.error(request, f"Saldo Indisponivel")
+                return redirect ('atualizar_saldo_view')
 
     else:
         

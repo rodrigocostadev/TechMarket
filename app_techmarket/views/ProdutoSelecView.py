@@ -18,23 +18,29 @@ def prod_selecionado_view(request, pk):
     if request.method == 'POST':
         if 'compra_realizada' in request.POST:
 
-            usuario.saldo -= produto.preco
-            usuario.save()
+            if usuario.saldo > produto.preco:
 
-            Compra.objects.create(
-                produto=produto,
-                usuario=request.user
-            )
+                usuario.saldo -= produto.preco
+                usuario.save()
 
-            Movimentacao.objects.create(
-                produto=produto,
-                usuario=request.user,
-                valor=produto.preco,
-                tipo_movimentacao="Compra"
-            )
+                Compra.objects.create(
+                    produto=produto,
+                    usuario=request.user
+                )
 
-            messages.success(request, f"Compra realizada com sucesso!")
-            return redirect ('home_view')
+                Movimentacao.objects.create(
+                    produto=produto,
+                    usuario=request.user,
+                    valor=produto.preco,
+                    tipo_movimentacao="Compra"
+                )
+
+                messages.success(request, f"Compra realizada com sucesso!")
+                return redirect ('home_view')
+            
+            else:
+                messages.error(request, f"Você não possui Saldo Suficiente.")
+                return redirect ('home_view')
         
     else:        
         return render(request, 'produto_selecionado.html', {'produto': produto}) 
