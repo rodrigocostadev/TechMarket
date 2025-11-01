@@ -39,37 +39,57 @@
     <div class="d-flex flex-column w-100 mb-5">
         <h2 class="mx-auto mb-5">Techmarket - Cadastro</h2>
 
-        <form method="POST" class="mx-auto" style="width:40%;" action="{% url 'cadastro_view' %}" enctype="multipart/form-data">
+        <form id="cadastroForm" method="POST" class="mx-auto" style="width:40%;" action="{% url 'cadastro_view' %}" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class="mb-3">
-                <label class="form-label">Usuário</label>
-                <input type="text" name="usuario" class="form-control" placeholder="Digite seu nome de usuário" required>
+                <label class="form-label">Nome Completo</label>
+                <input id="nome_completo" type="text" name="nome_completo" class="form-control" placeholder="Digite seu nome completo" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">CPF</label>
+                <input id="cpf" type="number" step="1" name="cpf" class="form-control" placeholder="11 dígitos" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Data de Nascimento</label>
+                <input id="data_nascimento" type="date" name="data_nascimento" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Número de Telefone</label>
+                <input id="telefone" type="number" step="1" name="telefone" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nome de Usuário</label>
+                <input id="usuario"  type="text" name="usuario" class="form-control" placeholder="Digite seu nome de usuário" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">E-mail</label>
-                <input type="email" name="email" class="form-control" placeholder="Digite seu e-mail" required>
+                <input id="email" type="email" name="email" class="form-control" placeholder="Digite seu e-mail" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Senha</label>
-                <input type="password" name="senha1" class="form-control" placeholder="Digite sua senha" required>
+                <input id="senha1" type="password" name="senha1" class="form-control" placeholder="Digite sua senha" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Confirmar senha</label>
-                <input type="password" name="senha2" class="form-control" placeholder="Confirme sua senha" required>
+                <input id="senha2" type="password" name="senha2" class="form-control" placeholder="Confirme sua senha" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Saldo inicial</label>
-                <input type="number" step="0.01" name="saldo" class="form-control" placeholder="Ex: 1000.00" required>
+                <input id="saldo" type="number" step="0.01" name="saldo" class="form-control" placeholder="Ex: 1000.00" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Imagem de Perfil</label>
-                <input type="file" name="imagem" class="form-control" accept="image/*" required>
+                <input id="imagem" type="file" name="imagem" class="form-control" accept="image/*" required>
             </div>
 
             <div class="d-flex justify-content-center mt-5">
@@ -85,3 +105,117 @@
     </div>
 </div>
 
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+<script>
+document.getElementById("cadastroForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const mensagem = document.getElementById("mensagem");
+    //mensagem.textContent = "";
+
+    const cpf = document.getElementById("cpf").value.trim();
+    const dataNasc = document.getElementById("data_nascimento").value;
+    const telefone = document.getElementById("telefone").value.trim();
+    const senha1 = document.getElementById("senha1").value;
+    const senha2 = document.getElementById("senha2").value;
+
+    // CPF precisa ter 11 dígitos numéricos
+    if (!/^\d{11}$/.test(cpf)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'CPF inválido',
+            text: 'O CPF deve conter exatamente 11 dígitos numéricos.'
+        });
+        return;
+    }
+
+    // Telefone: 10 ou 11 dígitos
+    if (!/^\d{10,11}$/.test(telefone)) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Telefone inválido',
+            text: 'O telefone deve conter 10 ou 11 dígitos (DDD incluso).'
+        });
+        return;
+    }
+
+    // Data de nascimento: mínimo 18 anos
+    const hoje = new Date();
+    const nascimento = new Date(dataNasc);
+    const idade = hoje.getFullYear() - nascimento.getFullYear();
+    const mesAjuste = hoje.getMonth() < nascimento.getMonth() ||
+                      (hoje.getMonth() === nascimento.getMonth() && hoje.getDate() < nascimento.getDate());
+    if (idade < 18 || (idade === 18 && mesAjuste)) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Idade mínima não atingida',
+            text: 'Você precisa ter pelo menos 18 anos para se cadastrar.'
+        });
+
+        return;
+    }
+
+    // Senhas iguais
+    if (senha1 !== senha2) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Senhas diferentes',
+            text: 'As senhas informadas não coincidem.'
+        });
+        return;
+    }
+
+    const form = document.getElementById("cadastroForm");
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch("/techmarket/cadastro/", {
+            method: "POST",
+            body: formData,
+            headers: {
+                "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+            }
+        });
+
+        if (response.redirected) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Cadastro realizado!',
+                text: 'Seu cadastro foi concluído com sucesso!',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                window.location.href = response.url;
+            });
+        } else if (response.ok) {
+            const data = await response.text();
+            Swal.fire({
+                icon: 'success',
+                title: 'Cadastro realizado!',
+                text: 'Faça login para continuar.',
+                showConfirmButton: false,
+                timer: 2000
+            }).then(() => {
+                window.location.href = response.url;
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro no cadastro',
+                text: 'Ocorreu um problema ao enviar os dados. Tente novamente.'
+            });
+        }
+
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro de conexão',
+            text: 'Não foi possível se conectar ao servidor.'
+        });
+    }
+});
+</script>

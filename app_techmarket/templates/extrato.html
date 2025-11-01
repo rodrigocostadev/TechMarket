@@ -20,27 +20,33 @@
         </div> {% endcomment %}
 
         {% if movimentacoes_usuario %}
-            {% for compra in movimentacoes_usuario %}
-                <div class="alert alert-info text-center mb-4 w-50 mx-auto">
+            {% for movimentacao in movimentacoes_usuario %}
+
+                {% comment %} Destaca as movimentações acima de 5000 {% endcomment %}
+                {% if movimentacao.valor >= 5000 %}
+                    <div class="alert alert-danger text-center mb-4 w-75 mx-auto">
+                {% else %}
+                    <div class="alert alert-info text-center mb-4 w-75 mx-auto">
+                {% endif %}
                     <div class="d-flex justify-content-around" >
                         <div class="" >
-                            <strong>Data:</strong> {{ compra.data_hora|date:"d/m/Y H:i" }}
+                            <strong>Data:</strong> {{ movimentacao.data_hora|date:"d/m/Y H:i" }}
                         </div>
-                        {% if compra.produto %}
+                        {% if movimentacao.produto %}
                             <div class="" >
-                                <strong>Produto:</strong> {{ compra.produto.titulo|default_if_none:"" }}
+                                <strong>Produto:</strong> {{ movimentacao.produto.titulo|default_if_none:"" }}
                             </div>
                         {% endif %}  
                     </div>
                     <div class="d-flex justify-content-around mt-4">
                         <div class="" >
-                            <strong>Descrição:</strong> {{ compra.tipo_movimentacao }}
+                            <strong>Descrição:</strong> {{ movimentacao.tipo_movimentacao }}
                         </div>
                         <div class="" >
-                            {% if compra.tipo_movimentacao == "Deposito" %}
-                                <strong>Valor:</strong> + R$ {{ compra.valor|floatformat:2 }}
+                            {% if movimentacao.tipo_movimentacao == "Deposito" %}
+                                <strong>Valor:</strong> + R$ {{ movimentacao.valor|floatformat:2 }}
                             {% else %}
-                                <strong>Valor:</strong> - R$ {{ compra.valor|floatformat:2 }}
+                                <strong>Valor:</strong> - R$ {{ movimentacao.valor|floatformat:2 }}
                             {% endif %}                            
                         </div>
                     </div>

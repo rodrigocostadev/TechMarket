@@ -34,6 +34,20 @@
                 <li class="list-group-item">
                     <strong>E-mail:</strong> {{ user.email }}
                 </li>
+
+                <li class="list-group-item">
+                    <strong>Cpf:</strong> {{ user.perfil_usuario.cpf }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Data de Nascimento:</strong> {{ user.perfil_usuario.data_nascimento }}
+                </li>
+                <li class="list-group-item">
+                    <strong>Telefone:</strong> {{ user.perfil_usuario.numero_telefone }}
+                </li>
+
+                {% comment %} <li class="list-group-item">
+                    <strong>E-mail:</strong> {{ user.email }}
+                </li> {% endcomment %}
                 <li class="list-group-item">
                     <strong>Data de cadastro:</strong> {{ user.date_joined|date:"d/m/Y" }}
                 </li>
