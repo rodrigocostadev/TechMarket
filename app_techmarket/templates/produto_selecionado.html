@@ -102,6 +102,7 @@
                 <p style="height:65%; display:flex; align-items:center; justify-content:center; font-family: sans-serif;">Sem foto disponível</p>
             {% endif %}
             <h2>{{ produto.titulo }} </h2>
+            <p><strong>Descrição:</strong> R$ {{ produto.descricao }}</p>
             <p><strong>Preço:</strong> R$ {{ produto.preco }}</p>
             {% comment %} <p><strong>Ano de fabricação:</strong> {{ object.factory_year }}</p>
             <p><strong>Ano do modelo:</strong> {{ object.model_year }}</p>
