@@ -10,12 +10,12 @@
 
     <!-- CDNS PARA A TABELA-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;1,300;1,400&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.6/af-2.6.0/b-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">  {% endcomment %}
 
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <title>App Techmartket</title>
@@ -24,28 +24,16 @@
 <div>
 
     <header> 
-        <nav class="navbar navbar-dark bg-dark fixed-top">
+        {% comment %} <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid" >
-                {% comment %} <p class="navbar-brand m-0">App Rotina Supervisor</p> {% endcomment %}
                 <div class="d-flex align-items-center gap-2">
                     <a class="navbar-brand" href="{% url 'home_view' %}" >Techmarket</a>
-
-                    {% comment %} <a class="navbar-brand" href="{% url 'home_view' %}" >Techmarket</a> {% endcomment %}
                     <a class="navbar-brand" href="{% url 'atualizar_saldo_view' %}" >Att Saldo</a>
-                    {% comment %} <a class="navbar-brand" href="{% url 'cadastro_view' %}" >Cadastro</a> {% endcomment %}
                     <a class="navbar-brand" href="{% url 'extrato_view' %}" >Extrato</a>
                     <a class="navbar-brand" href="{% url 'minhas_compras_view' %}" >Minhas Compras</a>
                     
-
-                    {% comment %} {% if user.is_staff or usuario_nome_completo == "Gerente Teste" or usuario_nome_completo == "Raphael Grego Fagundes" %}
-                        <a class="navbar-brand" href="{% url 'editar_supervisores' %}" >Supervisores</a>
-                    {% endif %}    {% endcomment %}
                 </div>
-                
-                
-                {% comment %} {% if user.is_authenticated and user.is_staff  %} {% endcomment %}
-                    {% comment %} <a class="navbar-brand" href="{% url 'teste' %}" >Solicitação de NF</a> {% endcomment %}
-                {% comment %} {% endif %}  {% endcomment %}
+
                 <div class="d-flex align-items-center gap-4">
                     {% if user.is_authenticated %}
                         <span class="text-white">
@@ -56,8 +44,53 @@
                     {% endif %}
                 </div>
             </div>
+        </nav>   {% endcomment %}
 
-        </nav>  
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+            
+            <!-- Marca -->
+            <a class="navbar-brand fw-bold" href="{% url 'home_view' %}">Techmarket</a>
+
+            <!-- Botão hambúrguer (aparece no mobile) -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTechmarket" aria-controls="navbarTechmarket" aria-expanded="false" aria-label="Alternar navegação">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Itens do menu -->
+            <div class="collapse navbar-collapse" id="navbarTechmarket">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'atualizar_saldo_view' %}">Att Saldo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'extrato_view' %}">Extrato</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'minhas_compras_view' %}">Minhas Compras</a>
+                </li>
+                </ul>
+
+                <!-- Informações do usuário -->
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item me-3 text-white">
+                    💰 Saldo: <strong>R$ {{ user.perfil_usuario.saldo }}</strong>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'perfil_view' %}">
+                    {{ request.user }}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="{% url 'logout' %}">Sair</a>
+                </li>
+                </ul>
+                {% endif %}
+            </div>
+
+            </div>
+        </nav>
     </header>
 
     {% for message in messages %}
@@ -100,5 +133,9 @@
     {% block  content %}
         <!-- Conteúdo  -->
     {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+        crossorigin="anonymous"></script>
 
 </div>

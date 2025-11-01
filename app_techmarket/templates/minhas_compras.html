@@ -2,101 +2,162 @@
 
 {% load static %}
 
-{% block css %} 
-    {% comment %} <link rel="stylesheet" href="{% static 'css/home.css' %}"> {% endcomment %}
-    <style>
+
+{% block css %}
+<style>
+    /* --- CONTAINER GERAL --- */
+    .container {
+        max-width: 900px;
+        padding: 0 15px;
+    }
+
+    /* --- TÍTULO --- */
+    h1 {
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        color: #212529;
+    }
+
+    /* --- CARD DE COMPRA --- */
+    .compra-card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+        transition: all 0.25s ease-in-out;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    .compra-card:hover {
+        background-color: #f1f3f5;
+        transform: scale(1.01);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    /* --- CONTEÚDO DO CARD --- */
+    .compra-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .compra-info strong {
+        color: #212529;
+    }
+
+    .compra-info p,
+    .compra-info div {
+        margin: 0;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .compra-info .valor {
+        font-size: 1.1rem;
+        color: #198754;
+        font-weight: 600;
+    }
+
+    /* --- IMAGEM DO PRODUTO --- */
+    .compra-imagem {
+        width: 230px;
+        height: 150px;
+        border-radius: 10px;
+        object-fit: cover;
+        margin-left: 25px;
+        border: 1px solid #ccc;
+        flex-shrink: 0;
+    }
+
+    /* --- RESPONSIVIDADE --- */
+    @media (max-width: 992px) {
         .compra-card {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .compra-card:hover {
-            background-color: #e9ecef;
-            transform: scale(1.01);
-        }
-
-        .compra-info {
-            flex: 1;
-        }
-
-        .compra-info h5 {
-            font-weight: bold;
-            color: #212529;
-            margin-bottom: 10px;
-        }
-
-        .compra-info p {
-            margin: 0;
-            font-size: 1.1rem;
-            color: #198754;
+            width: 90%;
+            margin: 0 auto 25px auto;
         }
 
         .compra-imagem {
-            width: 250px;
-            height: 150px;
-            border-radius: 10px;
-            object-fit: cover;
-            margin-left: 20px;
-            border: 1px solid #ccc;
+            width: 200px;
+            height: 130px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .compra-card {
+            flex-direction: column-reverse;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            padding: 15px;
         }
 
-        @media (max-width: 768px) {
-            .compra-card {
-                flex-direction: column-reverse;
-                text-align: center;
-            }
-
-            .compra-imagem {
-                margin: 10px 0 0 0;
-                width: 100%;
-                max-width: 250px;
-                height: auto;
-            }
+        .compra-imagem {
+            margin: 15px 0 5px 0;
+            width: 100%;
+            max-width: 280px;
+            height: auto;
         }
-    </style>
+
+        .compra-info {
+            gap: 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.6rem;
+        }
+
+        .compra-card {
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .compra-info strong {
+            font-size: 0.95rem;
+        }
+
+        .compra-info div {
+            font-size: 0.9rem;
+        }
+
+        .compra-imagem {
+            max-width: 230px;
+        }
+    }
+</style>
 {% endblock %}
-
 
 {% block content %}
+<div class="container mt-5 pt-5">
+    <h1 class="text-center mb-4">Minhas Compras</h1>
 
-    <div class="container mt-5">
-
-        <h1 class="text-center mb-4 pt-3">Minhas Compras</h1>
-
-        {% if compras_usuario %}
-            {% for compra in compras_usuario %}
-                <div class="compra-card w-50 mx-auto">
-                    <div class="compra-info d-flex flex-column gap-3">
-                        <div class="d-flex align-items-center gap-3">
-                            <strong class="fs-5" >Produto:</strong>{{ compra.produto.titulo }}
-                        </div>
-                        <div class="d-flex gap-3">
-                            <strong>Descrição:</strong>{{ compra.produto.descricao }}
-                        </div>
-                        <div class="d-flex gap-3">
-                            <strong>Valor:</strong>R$ {{ compra.produto.preco|floatformat:2 }}
-                        </div>
-                    </div>
-
-                    {% if compra.produto.imagem %}
-                        <img src="{{ compra.produto.imagem.url }}" alt="{{ compra.produto.titulo }}" class="compra-imagem">
-                    {% else %}
-                        <img src="{% static 'img/sem-imagem.png' %}" alt="Sem imagem" class="compra-imagem">
-                    {% endif %}
+    {% if compras_usuario %}
+        {% for compra in compras_usuario %}
+            <div class="compra-card mx-auto">
+                <div class="compra-info">
+                    <div><strong>Produto:</strong> {{ compra.produto.titulo }}</div>
+                    <div><strong>Descrição:</strong> {{ compra.produto.descricao }}</div>
+                    <div class="valor"><strong>Valor:</strong> R$ {{ compra.produto.preco|floatformat:2 }}</div>
                 </div>
-            {% endfor %}
-        {% else %}
-            <p class="text-center text-muted">Você ainda não realizou nenhuma compra.</p>
-        {% endif %}
 
-    </div>
-
+                {% if compra.produto.imagem %}
+                    <img src="{{ compra.produto.imagem.url }}" alt="{{ compra.produto.titulo }}" class="compra-imagem">
+                {% else %}
+                    <img src="{% static 'img/sem-imagem.png' %}" alt="Sem imagem" class="compra-imagem">
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center text-muted">Você ainda não realizou nenhuma compra.</p>
+    {% endif %}
+</div>
 {% endblock %}
+
+
 
