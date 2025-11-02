@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from app_techmarket.models import PerfilUsuario
 from app_techmarket.models.Movimentacao import Movimentacao
+import requests
 
 def cadastro_view(request):
 
@@ -34,30 +35,49 @@ def cadastro_view(request):
         mes = data_nascimento.split("-")[1]
         dia = data_nascimento.split("-")[2]
 
-        data_nascimento = f"{dia}/{mes}/{ano}"
+        data_nascimento = f"{dia}/{mes}/{ano}"        
 
-        novo_usuario = User.objects.create_user(
-            username=usuario, 
-            first_name=nome_completo.split(" ")[0],
-            last_name=" ".join(nome_completo.split(" ")[1:]),
-            email=email, 
-            password=senha1,
-        )
+        # Envio de Saldo para registrar na API
+        api_url = "http://localhost:8080/saldos/"
+        payload = {
+            "usuario": usuario,
+            "saldo": saldo
+        }
 
-        PerfilUsuario.objects.create(
-            usuario=novo_usuario, 
-            saldo=saldo, 
-            imagem=imagem,
-            cpf=cpf,
-            data_nascimento=data_nascimento,
-            numero_telefone=numero_telefone,
-        )
+        try:
+            # Cria registro de saldo do usuario na API
+            response = requests.post(api_url, json=payload)
+            if response.status_code == 201:
 
-        Movimentacao.objects.create(
-            usuario=novo_usuario,
-            valor=saldo,
-            tipo_movimentacao="Deposito"
-        )
+                novo_usuario = User.objects.create_user(
+                    username=usuario, 
+                    first_name=nome_completo.split(" ")[0],
+                    last_name=" ".join(nome_completo.split(" ")[1:]),
+                    email=email, 
+                    password=senha1,
+                )
+
+                PerfilUsuario.objects.create(
+                    usuario=novo_usuario, 
+                    saldo=saldo, 
+                    imagem=imagem,
+                    cpf=cpf,
+                    data_nascimento=data_nascimento,
+                    numero_telefone=numero_telefone,
+                )
+
+                Movimentacao.objects.create(
+                    usuario=novo_usuario,
+                    valor=saldo,
+                    tipo_movimentacao="Deposito"
+                )
+
+                print(" Saldo criado com sucesso na API.")
+            else:
+                print(f" Erro ao criar saldo na API: {response.status_code}")
+                print(response.text)
+        except requests.exceptions.RequestException as e:
+            print(f" Falha ao conectar à API de saldo: {e}")
 
         messages.success(request, "Cadastro realizado com sucesso! Faça login para continuar.")
         return redirect('login')
